@@ -1,0 +1,10 @@
+indent_style = "Visual"
+reorder_imports = true
+combine_control_expr = false
+control_brace_style = "ClosingNextLine"
+fn_single_line = true
+where_single_line = true
+force_explicit_abi = true
+merge_imports = true
+struct_field_align_threshold = 20
+tab_spaces = 2
