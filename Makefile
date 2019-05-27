@@ -37,7 +37,7 @@ ${SERIAL}: ${CA_DIR}
 	-rm $(@).tmp
 
 config.json: ${CERT} config.dhall
-	dhall-to-json <<< '(./config.dhall) ("${CERT}")' > config.json
+	dhall-to-json --pretty <<< '(./config.dhall) ("${CERT}")' > config.json
 
 .PHONY: keys
 keys: ${CERT} ${CA} ${KEY}

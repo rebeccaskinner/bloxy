@@ -1,0 +1,104 @@
+* Bloxy Components
+
+This document describes the core components of bloxy, with a high
+level description of their role in the overall blocking architecture.
+
+See the high level architectural diagram for a visual representation
+of how these pieces interact.
+
+* Blocking Engine
+
+The blocking engine is the core part of bloxy.
+
+** bloxy_core
+
+bloxy_core is the core proxy and blocking application.  This component
+is responsible for starting and managing the lifecycle of any
+configured frontends, plugins, and the configuration management
+service.
+
+** bloxy_plugins
+
+The bloxy_core doesn't know how to block or filter traffic on it's
+own, instead relying on plugins that allow it to identify requests and
+content that should be blocked.  In general terms, plugins fall into
+one of three categories: Observers, Filters and Transformers.
+
+*** Observers
+
+Traffic observers do not modify or block any traffic; instead they
+gather information about data streams.  The primary use of observers
+is in logging requests and gathering data to train filters.
+
+**** URL Logger
+
+The URL Logger stores various information about requests.  It can be
+used to generate reports of requests, block lists, etc.
+
+**** Entropy Logger
+
+The entropy logger tries to calculate the amount of information in web
+requests.  It's goal is collect information that can be used to
+identify web trackers and ad domains.
+
+*** Filters
+
+Filters take data from an input stream and determine if the stream
+contains data that should be blocked.
+
+**** Blocklist Filter
+
+Blocklist plugins provide basic blocklist/allow-list filtering of
+domains and URLs.  Blocklists are not given the content of a data
+stream, and instead are expected to make a determination based on the
+address or domain of the request.
+
+**** Streaming Filters
+
+Streaming filters are stateless filters that work on a continuous
+stream of content.  They may elect to filter all content types and
+protocol, or register for a specific protocol and/or document type.
+Streaming filters are expected to make a decision on data a chunk at a
+time.
+
+**** Stateful Filters
+
+Stateful filters are the most sophisticated class of filters, and also
+have the highest performance impact.
+
+*** Transformers
+
+**** Cache (Memoizing Identity Transformer)
+
+The cache plugin uses the transformer plugin infrastructure to provide
+caching.
+
+**** Content Filter
+
+This plugin is able to provide content filtering of the stream in
+transit.
+
+* bloxy_dns
+
+The bloxy_dns module provides a DNS server that can be used to resolve
+requests if bloxy is on a network with DNS blackholing enabled.  This
+module can be run as a stand-alone DNS server or loaded as a module
+into bloxy.
+
+* Front-Ends
+
+Bloxy provides serveral different ways to make filtered requests.  In
+bloxy terminology they are referred to as frontends (not to be
+confused with the configuration management UI).
+
+** cli
+
+** bloxy_http
+
+** nf_bloxy
+
+** pf_bloxy
+
+* Configuration Management
+
+** bloxy_gw
